@@ -1,140 +1,86 @@
-# Deployify — Setup Guide
+<p align="center">
+  <a href="https://github.com/yourusername/deployify">
+    <img src="https://img.shields.io/badge/React-18.2-blue?logo=react" alt="React" />
+  </a>
+  <a href="https://vitejs.dev/">
+    <img src="https://img.shields.io/badge/Vite-5.0-purple?logo=vite" alt="Vite" />
+  </a>
+  <a href="https://supabase.com/">
+    <img src="https://img.shields.io/badge/Supabase-PostgreSQL-green?logo=supabase" alt="Supabase" />
+  </a>
+  <a href="https://www.npmjs.com/package/deployify-cli-official">
+    <img src="https://img.shields.io/npm/v/deployify-cli-official?logo=npm" alt="npm version" />
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" />
+  </a>
+</p>
+<h1 align="center">Deployify</h1>
 
-A self-hosted Netlify clone. Upload ZIP files → auto-deploys to Supabase Storage → generates a public URL.
+<p align="center">
+  <strong>Your Self-Hosted Netlify Alternative</strong><br/>
+  Deploy static sites in seconds with a single click or command.
+</p>
 
----
-
-## Stack
-- **Frontend**: React + Vite → deployed to Netlify
-- **Backend**: Supabase (Auth + PostgreSQL + Storage)
-- **Deploy logic**: Runs in the browser via JSZip (no server needed for MVP)
-
----
-
-## Step 1 — Create Supabase project
-
-1. Go to [supabase.com](https://supabase.com) → New project
-2. Note your **Project URL** and **anon key** (Settings → API)
-3. Go to **SQL Editor** → paste and run `supabase-schema.sql`
-
----
-
-## Step 2 — Enable Auth providers
-
-### Google OAuth
-1. Supabase Dashboard → Authentication → Providers → Google → Enable
-2. Create OAuth credentials at [console.cloud.google.com](https://console.cloud.google.com)
-   - Authorized redirect URI: `https://your-project.supabase.co/auth/v1/callback`
-3. Paste Client ID + Secret into Supabase
-
-### Email/Password
-1. Authentication → Providers → Email → Enable
-2. (Optional) Disable email confirmation for easier dev: Auth → Settings → uncheck "Enable email confirmations"
-
----
-
-## Step 3 — Set environment variables
-
-Copy `.env.example` to `.env.local`:
-
-```
-VITE_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGc...
-```
+<p align="center">
+  <a href="https://deployify-wheat.vercel.app/about">About</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-cli-tool">CLI Tool</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-deployment-flow">Deployment Flow</a> •
+  <a href="#-setup-guide">Setup Guide</a> •
+  <a href="#-security">Security</a>
+</p>
 
 ---
 
-## Step 4 — Run locally
+## 🚀 What is Deployify?
+
+**Deployify** is a production-ready, self-hosted static site deployment platform inspired by Vercel and Netlify. Built from the ground up to give you full control over your deployment infrastructure without vendor lock-in.
+
+Upload a ZIP file or use our CLI tool, and Deployify automatically extracts, deploys to Supabase Storage, and generates a public URL for your static site — complete with custom domain support, analytics, and team collaboration features.
+
+### ✨ Why Deployify?
+
+- **🔒 Full Data Ownership**: Your code, your data, your infrastructure
+- **⚡ Lightning Fast**: Browser-based extraction + edge functions for instant deployments
+- **🛠️ Developer First**: CLI tool available on npm for seamless CI/CD integration
+- **💰 Cost Effective**: Built on Supabase's generous free tier
+- **🎯 Feature Rich**: Teams, analytics, custom domains, and more out of the box
+
+---
+
+## 🌟 Features
+
+### For Developers
+
+| Feature | Description |
+|---------|-------------|
+| **One-Click Deploy** | Upload ZIP files directly from the dashboard |
+| **CLI Tool** | Deploy from terminal with `npx deployify-cli-official` |
+| **Custom Domains** | Connect your own domains with automatic SSL |
+| **Team Collaboration** | Invite team members and manage permissions |
+| **Analytics Dashboard** | Real-time traffic insights for all deployments |
+| **API Keys** | Generate and manage API keys for automation |
+| **Deploy History** | Track all deployments with rollback capability |
+
+### For Teams
+
+- 👥 Multi-user team workspaces
+- 🔐 Role-based access control (RBAC)
+- 📊 Shared analytics and deployment logs
+- 🌐 Centralized domain management
+
+
+### Deploy on CLI tool
 
 ```bash
-npm install
-npm run dev
-```
+# Step 1: Login with your API key
+npx deployify-cli-official login your-api-key-here
 
-Visit `http://localhost:5173`
+# Step 2: Initialize a new project
+npx deployify-cli-official init "My Portfolio" "my-portfolio"
 
----
-
-## Step 5 — Deploy to Netlify
-
-1. Push this repo to GitHub
-2. Netlify → New site from Git → select your repo
-3. Build settings:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-4. Environment variables → add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
-5. Deploy!
-
-### Update Google OAuth redirect URI
-After deploying, add your Netlify URL to Google OAuth:
-- `https://your-netlify-app.netlify.app` → Authorized JavaScript origins
-- `https://your-project.supabase.co/auth/v1/callback` → Authorized redirect URIs (already set)
-
-Also update Supabase:
-- Authentication → URL Configuration → Site URL → your Netlify URL
-
----
-
-## How deploying works
-
-```
-User uploads ZIP
-  ↓
-JSZip extracts files in browser
-  ↓
-Each file uploaded to Supabase Storage
-  bucket: deployify-sites
-  path:   sites/{unique-slug}/{filepath}
-  ↓
-Storage returns public URL
-  e.g. https://xxx.supabase.co/storage/v1/object/public/deployify-sites/sites/my-site-a3b4/index.html
-  ↓
-Site record saved in PostgreSQL
-  ↓
-User sees live URL in dashboard
-```
-
----
-
-## Project structure
-
-```
-deployify/
-├── src/
-│   ├── components/
-│   │   └── Layout.jsx          # Sidebar + nav
-│   ├── hooks/
-│   │   ├── useAuth.js          # Auth state
-│   │   └── useDeploy.js        # Zip extract + upload logic
-│   ├── lib/
-│   │   └── supabase.js         # All Supabase calls
-│   ├── pages/
-│   │   ├── AuthPage.jsx        # Login / signup
-│   │   ├── DashboardPage.jsx   # Sites grid + deploy modal
-│   │   ├── DeploysPage.jsx     # Deploy history
-│   │   └── SettingsPage.jsx    # Account settings
-│   ├── App.jsx                 # Router + auth guard
-│   ├── main.jsx
-│   └── index.css
-├── netlify.toml
-├── supabase-schema.sql         # Run this in Supabase SQL editor
-├── .env.example
-└── package.json
-```
-
----
-
-## Limitations (MVP)
-
-- Sites are hosted on Supabase Storage URLs (long URLs, not custom domains)
-- No GitHub webhook integration (manual upload only)
-- No build step (upload pre-built sites — Vite/CRA dist folder zipped)
-- Free Supabase Storage: 1 GB per project
-
-## Next steps (future upgrades)
-
-- [ ] Custom subdomain routing (e.g. `mysite.deployify.app`)
-- [ ] GitHub webhook → auto-deploy on push
-- [ ] Build queue (run `npm run build` server-side via Netlify Functions)
-- [ ] Teams + paid plan enforcement
-- [ ] Analytics (page views via Supabase Edge Functions)
+# Step 3: Deploy instantly
+npx deployify-cli-official deploy
