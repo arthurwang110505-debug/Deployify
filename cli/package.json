@@ -1,0 +1,36 @@
+{
+  "name": "deployify-cli-official",
+  "version": "1.0.3",
+  "description": "The official CLI for Deployify. Host your static sites instantly from the terminal.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arthurwang110505/deployify.git"
+  },
+  "homepage": "https://deployify-wheat.vercel.app",
+  "main": "deployify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "deploy",
+    "hosting",
+    "static",
+    "cli",
+    "deployify",
+    "vercel-clone"
+  ],
+  "author": "Deployify Team",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "deployify": "deployify.js"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.17",
+    "axios": "^1.15.2",
+    "commander": "^14.0.3",
+    "dotenv": "^17.4.2",
+    "form-data": "^4.0.5",
+    "fs-extra": "^11.3.4"
+  }
+}

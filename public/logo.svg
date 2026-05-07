@@ -1,0 +1,6 @@
+<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="8" fill="#3DFFC0"/>
+  <path d="M12 20L20 12L28 20" stroke="#0A0B0D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 12V28" stroke="#0A0B0D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="55" y="32" fill="#E8EAF0" style="font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700;">Deployify</text>
+</svg>

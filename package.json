@@ -1,0 +1,29 @@
+{
+  "name": "deployify",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "crypto-js": "^4.2.0",
+    "deployify-cli-official": "^1.0.2",
+    "jszip": "^3.10.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^3.0.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^6.21.0",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "supabase": "^2.98.2",
+    "vite": "^5.0.0"
+  }
+}
